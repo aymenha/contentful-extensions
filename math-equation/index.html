@@ -31,8 +31,9 @@
     </style>
   </head>
   <body>
-    <textarea id="eqInput" type="text" rows="5"></textarea>
+    <textarea id="eqInput" type="text" rows="5" placeholder="2 + 5"></textarea>
     <button onclick="saveInput()" class="btn">Save</button>
+    <button onclick="example()" class="btn">Example</button>
     <h3>Preview:</h3>
     <div id="eqPreview"></div>
 
@@ -48,27 +49,33 @@
         },
       };
 
+      let equation = "";
       let contentfulSdk = null;
-      let equation =
-        "\\sqrt{\\frac{75}{3}}+\\det\\left(\\begin{bmatrix}-1&2\\\\3&1\\\\\\end{bmatrix}\\right)-{\\sin\\left(\\frac{\\pi}{4}\\right)}^{2}";
       const eqInput = document.getElementById("eqInput");
       const eqPreview = document.getElementById("eqPreview");
 
       function rerender() {
+        eqInput.value = equation;
         eqPreview.innerText = `$$${equation}$$`;
         MathJax.typesetPromise([eqPreview]);
+        contentfulSdk.window.updateHeight();
       }
 
       function saveInput() {
         contentfulSdk.field.setValue({ data: equation, type: "tex" });
       }
 
+      function example() {
+        equation =
+          "\\sqrt{\\frac{75}{3}}+\\det\\left(\\begin{bmatrix}-1&2\\\\3&1\\\\\\end{bmatrix}\\right)-{\\sin\\left(\\frac{\\pi}{4}\\right)}^{2}";
+        rerender();
+      }
+
       function init(sdk) {
         contentfulSdk = sdk;
-        equation = contentfulSdk.field.getValue().data;
-        eqInput.value = equation;
+        const initialValue = contentfulSdk.field.getValue();
+        equation = initialValue ? initialValue.data : "";
         rerender();
-        contentfulSdk.window.updateHeight();
 
         // rerender on input value change
         eqInput.addEventListener("keyup", (e) => {
