@@ -1,0 +1,6 @@
+{
+  "id": "math-equation-editor",
+  "name": "Math Equation Editor",
+  "srcdoc": "./index.html",
+  "fieldTypes": ["Object"]
+}
