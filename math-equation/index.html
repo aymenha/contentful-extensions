@@ -7,16 +7,23 @@
       href="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension.css"
     />
     <script src="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension-api.js"></script>
+    <script src="https://unpkg.com/mathjs@7.0.0/dist/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML.js"></script>
   </head>
   <body>
+    <div id="pretty">$$$$</div>
     <script>
-      (function () {
-        console.log("hello");
+      function init(sdk) {
+        const pretty = document.getElementById("pretty");
+        const parenthesis = "keep";
+        const implicit = "hide";
+        const expr = "sqrt(75 / 3) + det([[-1, 2], [3, 1]]) - sin(pi / 4)^2";
+        const parsedExpr = math.parse(expr).toTex({ parenthesis, implicit });
+        pretty.innerHTML = "$$" + parsedExpr + "$$";
+      }
 
-        window.contentfulExtension.init(function (sdk) {
-          var value = sdk.field.getValue();
-          sdk.field.setValue("Hello world!");
-        });
+      (function () {
+        window.contentfulExtension.init(init);
       })();
     </script>
   </body>
