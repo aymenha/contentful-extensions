@@ -7,27 +7,77 @@
       href="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension.css"
     />
     <script src="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension-api.js"></script>
-    <script src="https://unpkg.com/mathjs@7.0.0/dist/math.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML.js"></script>
-  </head>
-  <body>
-    <div id="pretty">$$$$</div>
-    <script>
-      function init(sdk) {
-        console.log("start");
-        const pretty = document.getElementById("pretty");
-        const parenthesis = "keep";
-        const implicit = "hide";
-        const expr = "sqrt(75 / 3) + det([[-1, 2], [3, 1]]) - sin(pi / 4)^2";
-        const parsedExpr = math.parse(expr).toTex({ parenthesis, implicit });
-        pretty.innerHTML = "$$" + parsedExpr + "$$";
-        console.log("finish");
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <style>
+      #eqInput {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        margin: 1em 0;
       }
 
-      //   init();
+      #eqPreview {
+        border: 1px solid grey;
+      }
+
+      .btn {
+        font-size: 1.2em;
+        padding: 0.5em 1.5em;
+        border: 1px solid grey;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="eqInput" type="text" rows="5"></textarea>
+    <button onclick="saveInput()" class="btn">Save</button>
+    <h3>Preview:</h3>
+    <div id="eqPreview"></div>
+
+    <script>
+      MathJax = {
+        options: {
+          renderActions: {
+            addMenu: [0, "", ""],
+          },
+        },
+        startup: {
+          pageReady: () => {},
+        },
+      };
+
+      let contentfulSdk = null;
+      let equation =
+        "\\sqrt{\\frac{75}{3}}+\\det\\left(\\begin{bmatrix}-1&2\\\\3&1\\\\\\end{bmatrix}\\right)-{\\sin\\left(\\frac{\\pi}{4}\\right)}^{2}";
+      const eqInput = document.getElementById("eqInput");
+      const eqPreview = document.getElementById("eqPreview");
+
+      function rerender() {
+        eqPreview.innerText = `$$${equation}$$`;
+        MathJax.typesetPromise([eqPreview]);
+      }
+
+      function saveInput() {
+        contentfulSdk.field.setValue({ data: equation, type: "tex" });
+      }
+
+      function init(sdk) {
+        contentfulSdk = sdk;
+        equation = contentfulSdk.field.getValue().data;
+        eqInput.value = equation;
+        rerender();
+        contentfulSdk.window.updateHeight();
+
+        // rerender on input value change
+        eqInput.addEventListener("keyup", (e) => {
+          equation = e.target.value;
+          rerender();
+        });
+      }
 
       (function () {
-        console.log("before init");
         window.contentfulExtension.init(init);
       })();
     </script>

@@ -1,7 +1,7 @@
 {
   "id": "math-equation-editor",
   "name": "Math Equation Editor",
-  "srcdoc": "./index.html",
   "src": "http://localhost:36621/",
-  "fieldTypes": ["Object"]
+  "srcdoc": "./index.html",
+  "fieldTypes": ["Text"]
 }
