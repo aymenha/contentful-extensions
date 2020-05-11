@@ -14,15 +14,20 @@
     <div id="pretty">$$$$</div>
     <script>
       function init(sdk) {
+        console.log("start");
         const pretty = document.getElementById("pretty");
         const parenthesis = "keep";
         const implicit = "hide";
         const expr = "sqrt(75 / 3) + det([[-1, 2], [3, 1]]) - sin(pi / 4)^2";
         const parsedExpr = math.parse(expr).toTex({ parenthesis, implicit });
         pretty.innerHTML = "$$" + parsedExpr + "$$";
+        console.log("finish");
       }
 
+      //   init();
+
       (function () {
+        console.log("before init");
         window.contentfulExtension.init(init);
       })();
     </script>
