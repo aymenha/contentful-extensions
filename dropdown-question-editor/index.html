@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension.css"
+    />
+    <script src="https://unpkg.com/contentful-ui-extensions-sdk@3/dist/cf-extension-api.js"></script>
+    <style>
+      .btn {
+        font-size: 1.2em;
+        padding: 0.5em 1.5em;
+        border: 1px solid grey;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="saveInput()" class="btn">Save</button>
+    <script>
+      function saveInput() {
+        contentfulSdk.field.setValue({ data: equation, type: "tex" });
+      }
+
+      function init(sdk) {
+        contentfulSdk = sdk;
+        const initialValue = contentfulSdk.field.getValue();
+      }
+
+      (function () {
+        window.contentfulExtension.init(init);
+      })();
+    </script>
+  </body>
+</html>

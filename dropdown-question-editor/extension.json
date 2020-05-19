@@ -1,0 +1,7 @@
+{
+  "id": "dropdown-question-editor",
+  "name": "Dropdown Question Editor",
+  "src": "http://localhost:9000/",
+  "srcdoc": "./index.html",
+  "fieldTypes": ["Object"]
+}
